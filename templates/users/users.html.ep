@@ -1,0 +1,31 @@
+
+<p><center><table id = "tab1" border="1">
+    <tr> 
+      <th>ID</th>
+      <th>Name</th>
+      <th>E-mail</th>
+      <th>Password(MD5)</th>
+      <th>Money</th>
+      <th>Updated</th>
+      <th>Created</th>
+      <th>Sex</th>
+      <th>Delete</th>
+      <th>Ava</th>
+    </tr>
+    % while (my $row = $user->fetchrow_arrayref) {
+      <tr>
+        % for my $text (@$row) {
+          <td><%= $text %></td>   
+        % }
+         <td>
+            <form action="<%=url_for('delete')->to_abs%>"  method="post">      
+             <input name="id" value= <%= @$row[0] %> readonly = true style="height:0px; width:0px">
+	       <input type="submit" value= "X" style="height:39px; width:115px">
+	  	    </form>
+         </td>
+      </tr>
+    % }
+</table></center></p>
+
+
+

@@ -1,0 +1,21 @@
+%layout 'default';
+%title 'Add new user';
+
+<head>
+    <title> Add new user </title>
+</head>
+
+%if (flash 'adderror') {
+    <center><h2 style="background-color:red;"><%= flash 'adderror' %></h2></center>
+%}
+%if (flash 'avamessage') {
+    <center><h2 style="background-color:green;"><%= flash 'avamessage' %></h2></center>
+%}
+
+%if (flash 'avaerror') {
+    <center><h2 style="background-color:red;"><%= flash 'avaerror' %></h2></center>
+%}
+
+%= include 'users/form';
+
+

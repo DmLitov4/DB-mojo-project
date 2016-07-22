@@ -1,0 +1,104 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+
+    <link rel="stylesheet" type="text/css" media="screen" href="http://tarruda.github.com/bootstrap-datetimepicker/assets/css/bootstrap-datetimepicker.min.css"/>
+    <link rel="stylesheet" type="text/css" href="/css/bootstrap.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="/css/main.min.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="/css/main.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="/css/style.min.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="/css/main.css" media="screen" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+    <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="/css/style.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/main.min.css">
+
+    <script src="http://code.jquery.com/jquery-1.9.1.js"></script> 
+    <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+	
+</head>
+
+<body>
+     %if ($self->session->{user_id}) {
+         <img src="http://icons.iconarchive.com/icons/icons8/ios7/64/Users-User-Male-2-icon.png">
+         <h3> <%= $self->session->{login}  %> </h3>
+     %}
+    
+     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+
+  
+
+	 <script>
+			$( function() {
+			$( "#datepicker" ).datepicker({ dateFormat: 'yy-mm-dd' });
+			$("#datepicker").readonlyDatepicker(false);
+		  } );
+	 </script>
+	 
+	 <script type="text/javascript">
+           document.write ('<p>Current time is: <span id="date-time">', new Date().toLocaleString(), '<\/span>.<\/p>')
+           if (document.getElementById) onload = function () {
+	           setInterval ("document.getElementById ('date-time').firstChild.data = new Date().toLocaleString()", 50)
+     }
+     </script>
+	
+
+	<nav class="navbar navbar-default">
+		<div class="container-fluid">
+		 <!-- Brand and toggle get grouped for better mobile display -->
+		<div class="navbar-header">
+		  <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+			<span class="sr-only">Toggle navigation</span>
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+		  </button>
+		  <a class="navbar-brand" href="/">DB WebInterface by Dm.Litov4 </a>
+		</div>
+
+		<!-- Collect the nav links, forms, and other content for toggling -->
+		<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+		  <ul class="nav navbar-nav">
+			<li><a href="<%=url_for('useradd')->to_abs%>">Add <span class="sr-only">(current)</span></a></li>
+			<li><a href="/users/edit">Edit</a></li>
+			<li class="dropdown">
+			  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> Choose something else <span class="caret"></span></a>
+			  
+			  <ul class="dropdown-menu">
+				<li><a href="/users">Users</a></li>
+				<li><a href="/users">Help</a></li>
+			  </ul>
+			  
+			</li>
+		  </ul>
+		  <form class="navbar-form navbar-left" action="<%=url_for('search')->to_abs%>" method="post" role="search">
+			<div class="form-group">
+			  <input type="text" name = "srch" value= "<%= param('srch') %>" class="form-control" placeholder="Search by name or e-mail">
+			</div>
+			<button type="submit" class="btn btn-default">Submit</button>
+		  </form>
+		  
+			</li>
+		  </ul>
+		  % if (!($self->session->{login})){
+		   <ul class="nav navbar-nav">
+			<li><a href="/users/auth">Sign In</a></li>
+		  </ul>
+		  % } else {
+		   <ul class="nav navbar-nav">
+			<li><a href="/users/out">Sign Out </a></li>
+		  </ul>
+		  % }
+		  
+		</div><!-- /.navbar-collapse -->
+	  </div><!-- /.container-fluid -->
+	 </nav>
+	
+      <%= content %>
+  
+ 
+   </body>
+</html>

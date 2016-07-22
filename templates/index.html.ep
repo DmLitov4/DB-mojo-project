@@ -1,0 +1,81 @@
+%layout 'default';
+
+<center><p>
+        <h2> Welcome to the start page of our DataBase! </h2>
+</p></center>
+
+%if (!$self->session->{user_id}) {
+   %if (flash 'autherror'){
+	   <center><h2  style="background-color:red"><%= flash 'autherror' %></h2></center>
+	%}
+	<center><p><h3> Please <a href="/users/auth">sign in</a> to start work. </h2></p></center>
+	<center><img src="http://stratusbase.com/landing_files/img/model1.png" alt="альтернативный текст"></p></center>
+%} else {    
+    <center><img src="img/ind.png" alt=""></center>
+    %if (flash 'avaerror') {
+    <center><h2 style="background-color:red;"><%= flash 'avaerror' %></h2></center>
+    %}
+	%if (flash 'addmessage'){
+	   <center><h2  style="background-color:green;"><%= flash 'addmessage' %></h2></center>
+	%}
+	%if (flash 'deletemessage'){
+	   <center><h2 style="background-color:green;"><%= flash 'deletemessage' %></h2></center>
+	%}
+	%if (flash 'savemessage'){
+	   <center><h2  style="background-color:green;"><%= flash 'savemessage' %></h2></center>
+	%}
+	
+	%if (flash 'adderror'){
+	   <center><h2  style="background-color:red"><%= flash 'adderror' %></h2></center>
+	%}
+	<p><center><h4> Here is the list of users: </h3></center></p>
+	<p><center><table id = "tab1" border="1">
+		<tr>		  
+		  <th>ID</th>
+		  <th>Name</th>
+		  <th>E-mail</th>
+		  <th>Password</th>
+		  <th>Money</th>
+		  <th>Updated</th>
+		  <th>Created</th>
+		  <th>Sex</th>
+		  <th>Delete</th>
+		  <th>Ava</th>
+		</tr>
+		% while (my $row = $user->fetchrow_arrayref) {
+		  <tr>
+			% for my $text (@$row) {
+			      <td><%= $text %></td>   
+			% }
+			 <td>
+				<form action="<%=url_for('delete')->to_abs%>"  method="post">
+				  <input name="id" value= <%= @$row[0] %> readonly = true style="height:0px; width:0px;  visibility: hidden;">
+			      <input type="submit" value= "X" style="height:39px; width:115px">
+				</form>
+			 </td>
+			 
+			 <td>
+			     <form action="<%=url_for('set_ava')->to_abs%>" enctype="multipart/form-data" method="post">
+			         % my $image = "/img/" . @$row[0] . ".png";
+                     % my $imagepath = "/home/dmlitov4/proj/public/img/" . @$row[0] . ".png";
+                     % my $imagealter = "/img/" . @$row[0] . ".jpg";
+                     % my $imagealterpath = "/home/dmlitov4/proj/public/img/" . @$row[0] . ".jpg";
+                     % if (!(-e $imagepath) && !(-e $imagealterpath)) {
+			             <input type='file' title = "" name='image' accept="image/jpeg, image/png">
+			             <input name='id' value= <%= @$row[0] %> readonly = true style="height:0px; width:0px; visibility: hidden;">
+			             <input name='where' value= "page" readonly = true style="height:0px; width:0px; visibility: hidden;">
+			             <center><input type="submit" value= "Load" style="height:35px; width:90px"></center>                
+					   %}
+					   % if (-e $imagepath) {
+                             <center><img src= <%= $image %> width="64" height="64" alt=""></center>
+                       %} else {
+                             <center><img src = <%=$imagealter %> width="64" height="64" alt=""></center>
+                       %}		       
+                       
+                 </form>     
+             </td>
+		  </tr>
+		% }
+	</table></center></p>
+%}
+

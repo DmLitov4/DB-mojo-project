@@ -1,0 +1,51 @@
+%layout 'default';
+%title 'Edit user';
+
+<head>
+    <title>Edit user</title>
+</head>
+
+%if (flash 'avamessage') {
+    <center><h2 style="background-color:green;"><%= flash 'avamessage' %></h2></center>
+%}
+
+<p><center>
+	<form action="<%=url_for('makeedit')->to_abs%>" enctype="multipart/form-data" method="post">
+	    % my $idn = stash->{'idn'};
+		ID: <input type="text" name="id" style="height:40px; width:400px" value = 
+		<% if($idn) { %>
+			<%= $idn %>
+		   % }
+		 > 
+		Name: <input type="text" name="name" style="height:40px; width:400px" value = 
+		<% if( my $namen = stash->{'namen'}) { %>
+			<%= $namen %>
+		   % }
+		 >
+		Email: <input type="text" name="email" style="height:40px; width:400px" value = 
+		<% if( my $emailn = stash->{'emailn'}) { %>
+			<%= $emailn %>
+		   % }
+		 >
+		Pass: <input type="text" name="pass" style="height:40px; width:400px">
+		Money:<input type="text" name="money" style="height:40px; width:400px" value = 
+		<% if( my $moneyn = stash->{'moneyn'}) { %>
+			<%= $moneyn %>
+		   % }
+		 >
+		Created: <input type="text" id = "datepicker" name="datepicker" style="height:40px; width:400px" readonly='false'   value=
+		<% if( my $createdn = stash->{'createdn'}) { %>
+			   <%= $createdn %>
+		 % }   
+		> 
+		Sex:  <select name="sex" style="height:30px; width: 90px">
+		  <option value='M'>M</option>
+		  <option value='W'>W</option>
+		</select> </center></p>
+		Profile pic: <input type='file' name='image' accept="image/jpeg, image/png">
+		<p><center><input type="submit" value="Save" style="height:50px; width:150px" ;> </center></p>
+	 </form>
+		<input id="b1" value="Help" style="height:50px; width:150px" onclick="alert('Here you can edit user in DataBase! Update time will be auto-setted');" type="button"/></center></p>
+     
+		<center><a href="/users"><input id="b1" value="Cancel" style="height:50px; width:150px" onclick="alert('Now you're on users list page!');" type="button"/></center></p></a></center>
+   
