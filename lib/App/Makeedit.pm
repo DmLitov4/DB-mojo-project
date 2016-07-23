@@ -20,7 +20,7 @@ sub makeedit {
     my $filename = $file->filename;
     my ($extension) = $filename =~ /(\.[^.]+)$/;
     
-     my $validator  = Mojolicious::Validator->new;
+    my $validator  = Mojolicious::Validator->new;
     my $validation = $validator->validation;
     my $checks = $validator->checks;
     $validation->input({name => $name, email => $email, pass =>$pass, exten => $extension});
@@ -36,12 +36,18 @@ sub makeedit {
     my $edit = $self->app->db->prepare('UPDATE users SET id=?, name=?, email=?, pass=?, money=?, updated=?, created=?, sex=? WHERE id=?');
    
     if ($validation->is_valid) {
-		my $p = md5($pass);
-		$file->move_to("public/img/$id$extension");
+        my $p = md5($pass);
+        if (-e "/home/dmlitov4/proj/public/img/$id.png") {
+            unlink "/home/dmlitov4/proj/public/img/$id.png";
+        }
+        if (-e "/home/dmlitov4/proj/public/img/$id.jpg") {
+            unlink "/home/dmlitov4/proj/public/img/$id.jpg";
+        }
+	$file->move_to("public/img/$id$extension");
         $edit->execute($id, $name, $email, $p, $money, $updated, $created, $sex, $id);
         return $self->flash(savemessage => "Successfully saved!")->redirect_to('/users');
     } else {
-          return $self->flash(saveerror => "Error occured!")->redirect_to('/users');
+        return $self->flash(saveerror => "Error occured!")->redirect_to('/users');
       }
 }
 

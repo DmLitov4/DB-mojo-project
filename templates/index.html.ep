@@ -1,14 +1,14 @@
 %layout 'default';
 
 <center><p>
-        <h2> Welcome to the start page of our DataBase! </h2>
+    <h2> Welcome to the start page of our DataBase! </h2>
 </p></center>
 
 %if (!$self->session->{user_id}) {
    %if (flash 'autherror'){
 	   <center><h2  style="background-color:red"><%= flash 'autherror' %></h2></center>
 	%}
-	<center><p><h3> Please <a href="/users/auth">sign in</a> to start work. </h2></p></center>
+	<center><p><h3> Please <a href="/login">sign in</a> to start work. </h2></p></center>
 	<center><img src="http://stratusbase.com/landing_files/img/model1.png" alt="альтернативный текст"></p></center>
 %} else {    
     <center><img src="img/ind.png" alt=""></center>
@@ -24,7 +24,9 @@
 	%if (flash 'savemessage'){
 	   <center><h2  style="background-color:green;"><%= flash 'savemessage' %></h2></center>
 	%}
-	
+	%if (flash 'saveerror'){
+	   <center><h2  style="background-color:red;"><%= flash 'saveerror' %></h2></center>
+	%}
 	%if (flash 'adderror'){
 	   <center><h2  style="background-color:red"><%= flash 'adderror' %></h2></center>
 	%}
@@ -50,7 +52,7 @@
 			 <td>
 				<form action="<%=url_for('delete')->to_abs%>"  method="post">
 				  <input name="id" value= <%= @$row[0] %> readonly = true style="height:0px; width:0px;  visibility: hidden;">
-			      <input type="submit" value= "X" style="height:39px; width:115px">
+			      <input type="submit" class="btn btn-default" value= "X" style="height:39px; width:115px">
 				</form>
 			 </td>
 			 
@@ -64,7 +66,7 @@
 			             <input type='file' title = "" name='image' accept="image/jpeg, image/png">
 			             <input name='id' value= <%= @$row[0] %> readonly = true style="height:0px; width:0px; visibility: hidden;">
 			             <input name='where' value= "page" readonly = true style="height:0px; width:0px; visibility: hidden;">
-			             <center><input type="submit" value= "Load" style="height:35px; width:90px"></center>                
+			             <center><input type="submit" class="btn btn-default" value= "Load" style="height:35px; width:90px"></center>                
 					   %}
 					   % if (-e $imagepath) {
                              <center><img src= <%= $image %> width="64" height="64" alt=""></center>

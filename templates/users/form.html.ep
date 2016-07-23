@@ -3,34 +3,55 @@
 % my $row = $user->fetchrow_arrayref;
 % my $count = $cnt->fetchrow_arrayref;
 
+<head  
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+</head>
+
 <p><center>
 	<form action="<%=url_for('insert')->to_abs%>" enctype="multipart/form-data" method="post" onsubmit="return FormValidation();" onchange="return FormValidation();" onload = "return FormValidation();">
-        ID: <input type="text" name="id" style="height:40px; width:400px" value = <%= @$count[0] + 1  %> readonly = true> 
-        Name: <input type="text" name="name" style="height:40px; width:400px">
-        Email: <input type="text" name="email" style="height:40px; width:400px">
-        Pass: <input type="text" name="pass" style="height:40px; width:400px">
-        Money:<input type="text" name="money" style="height:40px; width:400px">
-        Created: <input type="text" id = "datepicker" name="datepicker" readonly='false'   value="Choose date from calendar!"   style="height:40px; width:400px"> 
-        Sex:  <select name="sex" style="height:30px; width: 90px">
-	        <option value='M'>M</option>
-	        <option value='W'>W</option>
-	    </select> </center></p>	
-	    Profile pic: <input type='file' name='image' accept="image/jpeg, image/png">
-        <p><center><input type="submit" value="Add" style="height:50px; width:150px" ;> </p></center>
+        <div class = "form-group">
+            ID: <input type="text" class = "form-control" name="id" style="height:40px; width:400px" value = <%= @$count[0] + 1  %> readonly = true>
+        </div>
+        <div class = "form-group">
+            Name: <input type="text" class = "form-control" name="name" style="height:40px; width:400px">
+        </div>
+        <div class = "form-group">
+            Email: <input type="text" class = "form-control" name="email" style="height:40px; width:400px">
+        </div>
+        <div class = "form-group">
+            Pass: <input type="text" class = "form-control" name="pass" style="height:40px; width:400px">
+        </div>
+        <div class = "form-group">
+            Money:<input type="text" class = "form-control" name="money" style="height:40px; width:400px">
+        </div>
+        <div class = "form-group">
+            Created: <input type="text" class = "form-control" id = "datepicker" name="datepicker" readonly='false' value="Choose date from calendar!" style="height:40px; width:400px"> 
+        </div>
+        <div class = "form-group"> 
+            Sex:  <select name="sex" class = "form-control" style="height:30px; width: 90px">
+	            <option value='M'>M</option>
+	            <option value='W'>W</option> 
+	        </select> </center></p>
+	    </div>	
+	    <center><div class = "form-group">
+	        Profile pic: <input type='file' class = "form-control" name='image' accept="image/jpeg, image/png" style="height:50px; width:250px;">
+	    </div><center>
+       
+             <center><input type="submit" class="btn btn-default" value="Add" style="height:90px; width:150px;"></center>
+        
     </form>
-	<center><input id="b1" value="Help" style="height:50px; width:150px" onclick="alert('Here you can add new user to DataBase! ID and Update time will be auto-setted');" type="button"></center>
-  
-     
-    <center><a href="/users"><input id="b1" value="Cancel" style="height:50px; width:150px" onclick="alert('Now you're on users list page!');" type="button"/></center></p></a></center>
+	<center><input id="b1" value="Help" class="btn btn-default" style="height:50px; width:150px" onclick="alert('Here you can add new user to DataBase! ID and Update time will be auto-setted');" type="button"></center> 
+    <center><a href="/users"><input id="b1" class="btn btn-default" value="Cancel" style="height:50px; width:150px" onclick="alert('Now you're on users list page!');" type="button"/></center></p></a></center>
 
 
 <script>
         function FormValidation(){
-				var em=document.getElementsByName('email')[0].value;
-				var pattern = /@.*/;
-				var check = true;
-				if(!(em.match(pattern))){					
-					document.getElementsByName("email")[0].style.borderColor = "red";
+		    var em=document.getElementsByName('email')[0].value;
+		    var pattern = /@.*/;
+			var check = true;
+			if(!(em.match(pattern))){					
+				document.getElementsByName("email")[0].style.borderColor = "red";
 					
 				} else {
 					document.getElementsByName("email")[0].style.borderColor = "green";

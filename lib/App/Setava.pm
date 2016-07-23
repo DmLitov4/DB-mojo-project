@@ -15,11 +15,10 @@ sub setava {
     my $checks = $validator->checks;
     $validation->input({exten => $extension});
     $validation->required('exten')->in('.png', '.jpg', '.jpeg');
-    if ($validation->is_valid && $where eq 'page') {
+    if ($validation->is_valid) {
         $file->move_to("public/img/$id$extension");
         return $self->redirect_to('/users');
-    }
-    
+    }  
     return $self->flash(avaerror => "Pic is not added")->redirect_to('/users');
 } 
 

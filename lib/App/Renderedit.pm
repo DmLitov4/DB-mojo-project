@@ -1,4 +1,4 @@
-package App::Edit;
+package App::Renderedit;
 use Mojo::Base 'Mojolicious::Controller';
 use POSIX;
 
