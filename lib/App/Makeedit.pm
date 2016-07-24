@@ -28,7 +28,6 @@ sub makeedit {
     $validation->required('pass')->size(6, 32);
     $validation->required('exten')->in('.png', '.jpg', '.jpeg');
     
-    
     if ($money eq "" || (!(looks_like_number($money)))) {
         $money = "NULL";
     }

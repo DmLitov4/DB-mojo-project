@@ -30,14 +30,14 @@ sub startup {
     my $rn =    $r->under()              ->   to('auth#check');
     
     $rn->       post('/set_ava')         ->   to('setava#setava')             -> name('setava');
-    $rn->       post('/insert')          ->   to('insert#insert');
-    $rn->       post('/delete')          ->   to('delete#delete');
-    $rn->       post('/makeedit')        ->   to('makeedit#makeedit');           
+    $rn->       get('/users/add')        ->   to('user#renderadd')            -> name('useradd');
+    $rn->       post('/insert')          ->   to('user#insert');
+    $rn->       get('/users/edit')       ->   to('user#renderedit');
+    $rn->       post('/makeedit')        ->   to('user#edit');    
+    $rn->       get('/users/:ID/edit')   ->   to('user#edit_by_id');        
+    $rn->       post('/delete')          ->   to('user#delete');
+    $rn->       get('/users/:ID/remove') ->   to('user#delete_by_id');
     $rn->       post('/search')          ->   to('search#search');
-    $rn->       get('/users/:ID/edit')   ->   to('renderedit#makeedit_by_id');
-    $rn->       get('/users/add')        ->   to('renderadd#renderadd')        -> name('useradd');
-    $rn->       get('/users/:ID/remove') ->   to('delete#delete_by_id');
-    $rn->       get('/users/edit')       ->   to('renderedit#edit');
     $rn->       get('/users/out')        ->   to('auth#delete');  
 }
 
