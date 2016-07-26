@@ -1,9 +1,39 @@
-package App::User;
+package App::Controller::User;
 use POSIX;
 use Mojo::Base 'Mojolicious::Controller';
 use Mojolicious::Validator;
 use Scalar::Util qw(looks_like_number);
 use Digest::MD5 qw(md5 md5_hex md5_base64);
+
+sub validateAll {
+    my ($email, $pass, $exten) = @_;
+    my $validator  = Mojolicious::Validator->new;
+    my $validation = $validator->validation;
+    my $checks = $validator->checks;
+    $validation->input({email => $email, pass =>$pass, exten => $exten});
+    $validation->required('email')->like(qr/@{1}/);
+    $validation->required('pass') ->size(6, 32);
+    if ($exten ne '') {
+       $validation->required('exten')->in('.png', '.jpg', '.jpeg');
+    }
+    return $validation->is_valid;
+}
+
+sub setpic {  
+    my $self = shift;
+    my $file = $self->req->upload('image');
+    my $filename = $file->filename;
+    my $id = $self->param('id');
+    my $where = $self->param('where');
+    my ($extension) = $filename =~ /(\.[^.]+)$/;
+    $self->validation->input({exten => $extension});
+    $self->validation->required('exten')->in('.png', '.jpg', '.jpeg');
+    if ($self->validation->has_error) {
+        return $self->flash(avaerror => "Pic is not added")->redirect_to('/users');
+    }
+    $file->move_to("public/img/$id$extension");
+    return $self->flash(avamessage => "Pic is added")->redirect_to('/users');  
+} 
 
 sub renderadd {
     my $self = shift;
@@ -30,34 +60,35 @@ sub insert {
     my $filename = $file->filename;
     my ($extension) = $filename =~ /(\.[^.]+)$/;
     
-    my $validator  = Mojolicious::Validator->new;
-    my $validation = $validator->validation;
-    my $checks = $validator->checks;
-    $validation->input({name => $name, email => $email, pass =>$pass, exten => $extension});
-    $validation->required('email')->like(qr/@{1}/);
-    $validation->required('pass')->size(6, 32);
-    if ($filename ne '') {
-       $validation->required('exten')->in('.png', '.jpg', '.jpeg');
-    }
+    my $check = validateAll($email, $pass, $extension);
    
     if ($money eq "" || (!(looks_like_number($money)))) {
         $money = "NULL";
     }
     
-    if ($validation->is_valid) {
-        my $p = md5($validation->param('pass'));  
-        my $insert = $self->app->db->prepare('INSERT INTO users VALUES (?,?,?,?,?,?,?,?)'); 
-        $insert->execute($id, $name, $validation->param('email'), $p, $money, $updated, $created, $sex);
-        $file->move_to("public/img/$id$extension");
-        return $self->flash(addmessage => "Successfully added!")->redirect_to('/users');
-    } else {
-          return $self->flash(adderror => "Error occured while adding" . $filename)->redirect_to('/users');
-      }
+    if (!$check) {
+        return $self->flash(adderror => "Error occured while adding" . $filename)->redirect_to('/users');
+    }   
+    my $p = md5($pass);  
+    my $insert = $self->app->db->prepare('INSERT INTO users VALUES (?,?,?,?,?,?,?,?)'); 
+    $insert->execute($id, $name, $email, $p, $money, $updated, $created, $sex);
+    $file->move_to("public/img/$id$extension");
+    return $self->flash(addmessage => "Successfully added!")->redirect_to('/users');
 }
 
 sub renderedit {
     my $self = shift;
     return $self->render(template =>'edit');	
+}
+
+sub checkandremove {
+    my ($id) = @_;
+    if (-e "/home/dmlitov4/proj/public/img/$id.png") {
+        unlink "/home/dmlitov4/proj/public/img/$id.png";
+    }
+    if (-e "/home/dmlitov4/proj/public/img/$id.jpg") {
+        unlink "/home/dmlitov4/proj/public/img/$id.jpg";
+    }
 }
 
 sub edit_by_id {
@@ -72,18 +103,13 @@ sub edit_by_id {
     my $pass = @$row[3];
     my $created = @$row[5];
 
-    my $validator  = Mojolicious::Validator->new;
-    my $validation = $validator->validation;
-    my $checks = $validator->checks;
-    $validation->input({email => $email, pass =>$pass});
-    $validation->required('email')->like(qr/@{1}/);
-    $validation->required('pass') ->size(6, 32);
+    my $check = validateAll($email, $pass, '');
     
-    if ($validation->is_valid) {
+    if ($check) {
         return $self->render(template => 'edit', idn => $idstash, namen => $name, emailn => $email, moneyn => $money, createdn => $created);
     } else {
         return $self->flash(adderror => "Error occured!")->redirect_to('/users');
-    }
+      }
 }
 
 sub edit {
@@ -102,14 +128,7 @@ sub edit {
     my $filename = $file->filename;
     my ($extension) = $filename =~ /(\.[^.]+)$/;
     
-    my $validator  = Mojolicious::Validator->new;
-    my $validation = $validator->validation;
-    my $checks = $validator->checks;
-    $validation->input({name => $name, email => $email, pass =>$pass, exten => $extension});
-    $validation->required('email')->like(qr/@{1}/);
-    $validation->required('pass')->size(6, 32);
-    $validation->required('exten')->in('.png', '.jpg', '.jpeg');
-    
+    my $check = validateAll($email, $pass, $extension);
     
     if ($money eq "" || (!(looks_like_number($money)))) {
         $money = "NULL";
@@ -117,15 +136,12 @@ sub edit {
     
     my $edit = $self->app->db->prepare('UPDATE users SET id=?, name=?, email=?, pass=?, money=?, updated=?, created=?, sex=? WHERE id=?');
    
-    if ($validation->is_valid) {
+    if ($check) {
         my $p = md5($pass);
-        if (-e "/home/dmlitov4/proj/public/img/$id.png") {
-            unlink "/home/dmlitov4/proj/public/img/$id.png";
+        if ($extension ne '') {
+            checkandremove($id);
+	    $file->move_to("public/img/$id$extension");
         }
-        if (-e "/home/dmlitov4/proj/public/img/$id.jpg") {
-            unlink "/home/dmlitov4/proj/public/img/$id.jpg";
-        }
-	$file->move_to("public/img/$id$extension");
         $edit->execute($id, $name, $email, $p, $money, $updated, $created, $sex, $id);
         return $self->flash(savemessage => "Successfully saved!")->redirect_to('/users');
     } else {
@@ -138,6 +154,7 @@ sub delete {
     my $delete = $self->app->db->prepare('DELETE FROM users WHERE id=?');
     my $id = $self->param('id');
     $delete->execute($id);
+    checkandremove($id);
     return $self->flash(deletemessage => "Deleted successfully!")->redirect_to('/users');
 }
 
@@ -146,6 +163,7 @@ sub delete_by_id{
     my $delete = $self->app->db->prepare('DELETE FROM users WHERE id=?');
     my $id = $self->stash('ID');
     $delete->execute($id);
+    checkandremove($id);
     return $self->flash(deletemessage => "Deleted successfully!")->redirect_to('/users');
 }
 

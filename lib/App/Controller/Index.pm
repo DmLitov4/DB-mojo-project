@@ -1,8 +1,7 @@
-package App::Index;
+package App::Controller::Index;
 use Mojo::Base 'Mojolicious::Controller';
 
 sub index {
-#query
    my $self = shift;
    my $sth = $self->app->db->prepare('SELECT * FROM users ORDER BY id');
    $sth->execute;

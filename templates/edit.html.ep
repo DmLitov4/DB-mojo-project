@@ -10,7 +10,7 @@
 %}
 
 <p><center>
-	<form action="<%=url_for('makeedit')->to_abs%>" enctype="multipart/form-data" method="post">
+	<form action="<%=url_for('makeedit')->to_abs%>" enctype="multipart/form-data" method="post" onsubmit="return FormValidation();" onchange="return FormValidation();">
 	    % my $idn = stash->{'idn'};
 		<div class = form-group>
 		ID: <input type="text" name="id" class = "form-control" style="height:40px; width:400px" value = 
@@ -64,4 +64,38 @@
 	 </form>
      <center><input id="b1" value="Help" class="btn btn-default" style="height:50px; width:150px" onclick="alert('Here you can edit user in DataBase! Update time will be auto-setted');" type="button"/></center></p>
      <center><a href="/users"><input id="b1" class="btn btn-default" value="Cancel" style="height:50px; width:150px" onclick="alert('Now you're on users list page!');" type="button"/></center></p></a></center>
-   
+
+
+	<script>
+			function FormValidation(){
+				var em=document.getElementsByName('email')[0].value;
+				var pattern = /@.*/;
+				var check = true;
+				if(!(em.match(pattern))){					
+					document.getElementsByName("email")[0].style.borderColor = "red";
+						
+					} else {
+						document.getElementsByName("email")[0].style.borderColor = "green";
+					}
+					if (/^[0-9]+$/.test(document.getElementsByName("name")[0].value) || document.getElementsByName("name")[0].value === '') {
+						document.getElementsByName("name")[0].style.borderColor = "red";
+						
+					}  else {
+					   document.getElementsByName("name")[0].style.borderColor = "green";
+					}
+					if (isNaN(document.getElementsByName("money")[0].value) || document.getElementsByName("money")[0].value < 0) {
+						document.getElementsByName("money")[0].style.borderColor = "red";
+						
+					}  else {
+					   document.getElementsByName("money")[0].style.borderColor = "green";
+					}
+					if (document.getElementsByName("pass")[0].value.length < 6) {
+						document.getElementsByName("pass")[0].style.borderColor = "red";
+						
+					} else {
+						document.getElementsByName("pass")[0].style.borderColor = "green"
+					}			
+					return check;
+			}
+	</script>
+	   

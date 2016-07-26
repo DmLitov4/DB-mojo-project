@@ -8,7 +8,7 @@ sub authorization {
     
     my $login    = $self->param('login');
     my $password = $self->param('password');
-    my $pw = $password;
+    my $pw = md5($password);
     
     my $sth = $self->app->db->prepare('SELECT id, email, pass FROM users WHERE email =? AND pass =?');
     $sth->execute($login, $password);

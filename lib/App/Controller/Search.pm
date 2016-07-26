@@ -1,4 +1,4 @@
-package App::Search;
+package App::Controller::Search;
 use POSIX;
 use Mojo::Base 'Mojolicious::Controller';
 

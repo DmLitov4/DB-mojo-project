@@ -29,7 +29,7 @@ sub startup {
 
     my $rn =    $r->under()              ->   to('auth#check');
     
-    $rn->       post('/set_ava')         ->   to('setava#setava')             -> name('setava');
+    $rn->       post('/set_ava')         ->   to('user#setpic')               -> name('setava');
     $rn->       get('/users/add')        ->   to('user#renderadd')            -> name('useradd');
     $rn->       post('/insert')          ->   to('user#insert');
     $rn->       get('/users/edit')       ->   to('user#renderedit');

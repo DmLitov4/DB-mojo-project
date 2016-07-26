@@ -13,6 +13,7 @@ sub register {
           }
         } 
     );
+   
     $app->helper(users => sub {
         my $self = shift;
         my $id = $self->session->{user_id};
