@@ -24,7 +24,7 @@ sub startup {
     $r->        get('/')                 ->   to('index#index');
     $r->        get('/users')            ->   to('index#index');
     $r->        get('/login')            ->   to('auth#auth')                 -> name('login');
-    $r->        get('/api/users')        ->   to('Api::Getusers#getusers')    -> name('getusers');
+    $r->        get('/api/users/:NAME')        ->   to('Api::Getusers#getusers')    -> name('getusers');
     $r->        post('/authr')           ->   to('auth#authorization')        -> name('aut');
 
     my $rn =    $r->under()              ->   to('auth#check');
