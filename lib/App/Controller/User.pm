@@ -41,7 +41,7 @@ sub renderadd {
     my $cnt = $self->app->db->prepare('SELECT MAX(id) FROM users');
     $sth->execute;
     $cnt->execute;
-    $self->render(template =>'add', user => $sth, cnt => $cnt);
+    $self->render(template =>'users/add', user => $sth, cnt => $cnt);
 }
 
 sub insert {
@@ -78,7 +78,7 @@ sub insert {
 
 sub renderedit {
     my $self = shift;
-    return $self->render(template =>'edit');	
+    return $self->render(template =>'users/edit');	
 }
 
 sub checkandremove {
